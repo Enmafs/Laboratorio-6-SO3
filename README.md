@@ -17,7 +17,7 @@ Practica 2: IP tables - UFW/Firewall-cmd
 • Utilizando ufw (si su distro es basada en debian) o firewall-cmd (si su distro esta basada en Red Hat) bloquee el trafico del puerto 80,21 y 22 para bloquear las conexiones hacia ambos servicios.                 
 • Habilite nuevamente el trafico del puerto 80, 21 y 22 para permitir las conexiones hacia ambos servicios.                                                                                                        
                                                                                                                                                                                                                        
-Practica 3: Instalacion de IDS snort                                                                                                                                                                          
+Practica 3: Instalación de IDS snort                                                                                                                                                                          
 • Descargue e instale el  IDS snort.                                                                                                                                                                             
 • luego de instalado, cree las siguientes reglas de deteccion de trafico:                                                                                                                                        
                                                                                                                                                                                                              
