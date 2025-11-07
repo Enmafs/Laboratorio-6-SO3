@@ -99,3 +99,40 @@ alert tcp any any -> $HOME_NET 22 ( msg:"ALERTA! TRAFICO SSH DETECTADO”; sid:1
 alert tcp any any -> $HOME_NET any ( msg:"ALERTA! TRAFICO HTTP DETECTADO”; sid:10000004; )
 ]]
 snort -c /usr/local/snort/etc/snort/snort.lua -i ens160 -A alert_fast 
+
+Práctica 4
+sudo dnf install epel-release -y
+sudo dnf install google-authenticator qrencode -y
+google-authenticator
+
+sudo nano /etc/pam.d/sshd
+auth         required pam_google_authenticator.so no_strict_owner
+auth        required pam_unix.so
+auth	   substack     password-auth
+auth	   include        postlogin
+account   include        password-auth
+account   required      pam_sepermit.so
+account   required      pam_nologin.so
+account   include        password-auth
+password include       password-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    optional     pam_motd.so
+session    include	password-auth
+session    include	postlogin
+
+sudo nano /etc/ssh/sshd_config
+ChallengeResponseAuthentication	yes
+UsePAM	yes
+
+sudo chown efeliz:efeliz /home/efeliz/.google_authenticator
+sudo chmod 400 /home/efeliz/.google_authenticator
+revisen si os da error revisen los log 
+sudo tail /var/log/secure
+sudo setenforce 0
+sudo systemctl restart sshd
