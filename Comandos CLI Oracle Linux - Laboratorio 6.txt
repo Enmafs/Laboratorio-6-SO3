@@ -37,6 +37,9 @@ INSTALACIÓN DE SNORT
 sudo dnf config-manager --set-enabled ol10_codeready_builder
 # 2. Instalar el grupo de herramientas de desarrollo y dependencias críticas
 # Incluye herramientas de compilación, libdnet, pcre2, y hwloc.
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+sudo dnf configmanager --enable epel
+sudo dnf makecache
 sudo dnf install -y @development \
 flex bison gcc gcc-c++ cmake autoconf libtool git unzip wget \
 libpcap-devel pcre2-devel libdnet-devel openssl-devel zlib-devel \
@@ -89,18 +92,23 @@ nano snort.lua
 $HOME_NET ‘10.0.0.0/24’
 include ‘snort_defaults.lua’
 Ctrl / : 194
+###Agregar coma (,) despues de variables = default_variables###
 rules = [[
-alert icmp any any -> $HOME_NET any ( msg:"ALERTA! TRAFICO ICMP DETECTADO HACIA RED LOCAL”; sid:10000001; )
+alert icmp any any -> $HOME_NET any ( msg:"ALERTA! TRAFICO ICMP DETECTADO HACIA RED LOCAL"; sid:10000001; )
 
-alert tcp any any -> $HOME_NET 21 ( msg:"ALERTA! TRAFICO  FTP DETECTADO”; sid:10000002; )
+alert tcp any any -> $HOME_NET 21 ( msg:"ALERTA! TRAFICO  FTP DETECTADO"; sid:10000002; )
 
-alert tcp any any -> $HOME_NET 22 ( msg:"ALERTA! TRAFICO SSH DETECTADO”; sid:10000003; )
+alert tcp any any -> $HOME_NET 22 ( msg:"ALERTA! TRAFICO SSH DETECTADO"; sid:10000003; )
 
-alert tcp any any -> $HOME_NET any ( msg:"ALERTA! TRAFICO HTTP DETECTADO”; sid:10000004; )
+alert tcp any any -> $HOME_NET any ( msg:"ALERTA! TRAFICO HTTP DETECTADO"; sid:10000004; )
 ]]
-snort -c /usr/local/snort/etc/snort/snort.lua -i ens160 -A alert_fast 
+sudo nano ~/.bashrc
+alias snort-run='sudo snort -c /usr/local/snort/etc/snort/snort.lua --daq-dir /usr/local/lib/daq --daq pcap -i ens160 -A alert_fast
+source ~/.bashrc
 
+###En OL 8###
 Práctica 4
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 sudo dnf install epel-release -y
 sudo dnf install google-authenticator qrencode -y
 google-authenticator
@@ -132,7 +140,8 @@ UsePAM	yes
 
 sudo chown efeliz:efeliz /home/efeliz/.google_authenticator
 sudo chmod 400 /home/efeliz/.google_authenticator
-revisen si os da error revisen los log 
+revisen si les da error revisen los log 
 sudo tail /var/log/secure
 sudo setenforce 0
 sudo systemctl restart sshd
+
